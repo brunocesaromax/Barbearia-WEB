@@ -3,7 +3,7 @@ package modelo;
 public class Usuario {
 
     private Long id;
-    private String login;
+    private String email;
     private String nome;
     private String senha;
     private String bairro;
@@ -11,15 +11,8 @@ public class Usuario {
     private String cidade;
     private String estado;
     private String cep;
+    private int idade;
 
-    public Usuario(String login, String nome, String senha) {
-        this.login = login;
-        this.nome = nome;
-        this.senha = senha;
-    }
-
-    public Usuario() {
-    }
 
     public Long getId() {
         return id;
@@ -29,12 +22,12 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getNome() {
@@ -91,5 +84,13 @@ public class Usuario {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 }

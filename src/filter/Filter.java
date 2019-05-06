@@ -1,9 +1,12 @@
 package filter;
 
 import connection.SingleConnection;
+import modelo.Usuario;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,6 +23,7 @@ public class Filter implements javax.servlet.Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
 
         try {
             filterChain.doFilter(servletRequest, servletResponse); // Interceptar os requests e dar os respondes

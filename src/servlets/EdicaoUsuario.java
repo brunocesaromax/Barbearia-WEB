@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/cadastrarUsuario")
-public class CadastroUsuario extends HttpServlet {
+@WebServlet("/pages/editarUsuario")
+public class EdicaoUsuario extends HttpServlet {
 
     private UsuarioDao usuarioDao = new UsuarioDao();
 
@@ -24,8 +24,8 @@ public class CadastroUsuario extends HttpServlet {
 
         String email = request.getParameter("email");
 
-        if ((acao.equalsIgnoreCase("cadastrar") || acao.equalsIgnoreCase("edicao"))
-                && usuarioDao.getByEmail(email) == null) {
+        if ((acao.equalsIgnoreCase("cadastrar") || acao.equalsIgnoreCase("editar"))
+                && usuarioDao.getByEmail(email) == null) { //todo: verificar para usuário logado da seção
 
             String nome = request.getParameter("nome");
             int idade = Integer.parseInt(request.getParameter("idade"));
@@ -62,7 +62,7 @@ public class CadastroUsuario extends HttpServlet {
             if (acao.equalsIgnoreCase("cadastrar")) {
                 requestDispatcher = request.getRequestDispatcher("/logarOuCadastrar?acao=cadastrar");
             } else {
-                requestDispatcher = request.getRequestDispatcher("/cadastrarUsuario?acao=editar");
+                requestDispatcher = request.getRequestDispatcher("/pages/editarUsuario.jsp");
             }
         } else {
 

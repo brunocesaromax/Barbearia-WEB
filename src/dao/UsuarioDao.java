@@ -19,9 +19,9 @@ public class UsuarioDao {
     public void salvar(Usuario usuario) {
 
         try {
-            String sql = "insert into usuario(login,senha,nome,cep,rua,bairro,cidade,estado) values (?,?,?,?,?,?,?,?)";
+            String sql = "insert into usuario(email,senha,nome,cep,rua,bairro,cidade,estado,idade) values (?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, usuario.getLogin());
+            statement.setString(1, usuario.getEmail());
             statement.setString(2, usuario.getSenha());
             statement.setString(3, usuario.getNome());
             statement.setString(4, usuario.getCep());
@@ -29,6 +29,7 @@ public class UsuarioDao {
             statement.setString(6, usuario.getBairro());
             statement.setString(7, usuario.getCidade());
             statement.setString(8, usuario.getEstado());
+            statement.setLong(9, usuario.getIdade());
 
             statement.execute();
             connection.commit();
@@ -51,7 +52,7 @@ public class UsuarioDao {
         try {
             String sql = "update usuario set login = ?, senha = ?, nome = ? where id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, usuario.getLogin());
+            preparedStatement.setString(1, usuario.getEmail());
             preparedStatement.setString(2, usuario.getSenha());
             preparedStatement.setString(3, usuario.getNome());
             preparedStatement.setLong(4, usuario.getId());
@@ -70,11 +71,34 @@ public class UsuarioDao {
 
     }
 
+    public Usuario getByEmail(String email) {
+
+        try {
+
+            String sql = "select * from usuario where email = ? ";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(resultSet.getLong("id"));
+                return usuario;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
     public Usuario getByEmailAndSenha(String email, String senha) {
 
         try {
 
-            String sql = "select * from usuario where email = ? AND  senha=?";
+            String sql = "select * from usuario where email = ? AND senha = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, email);
             statement.setString(2, senha);
@@ -83,6 +107,7 @@ public class UsuarioDao {
             if (resultSet.next()) {
                 Usuario usuario = new Usuario();
                 usuario.setId(resultSet.getLong("id"));
+                usuario.setNome(resultSet.getString("nome"));
                 return usuario;
             }
 

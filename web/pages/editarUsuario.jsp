@@ -2,10 +2,10 @@
 
 <html>
 <head>
-    <title>Cadastro de Usuário</title>
+    <title>Edição de Usuário</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="style/bootstrap.min.css">
-    <script src="script/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../style/bootstrap.min.css">
+    <script src="../script/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
@@ -14,9 +14,9 @@
 </head>
 <body class="bg-light">
 
-<form action="cadastrarUsuario" id="formCadastroUsuario" onsubmit=" return validaCampos()" method="post"
+<form action="/pages/editarUsuario" id="formEdicaoUsuario" onsubmit=" return validaCampos()" method="post"
       accept-charset="ISO-8859-1">
-    <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Cadastro de usuário</h1>
+    <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Edição de usuário</h1>
     <br/>
     <br/>
     <div class="form-row">
@@ -72,13 +72,12 @@
     <div id="divResultado">
     </div>
 
-
     <button type="submit" class="btn btn-primary"
-            onclick="return document.getElementById('formCadastroUsuario').action = 'cadastrarUsuario?acao=cadastrar'">
-        Cadastrar
+            onclick="return document.getElementById('formEdicaoUsuario').action = 'editarUsuario?acao=editar'">
+        Editar
     </button>
     <button id="botaoCancelar" type="submit" class="btn btn-danger"
-            onclick="return document.getElementById('formCadastroUsuario').action = 'cadastrarUsuario?acao=cancelar&flagEdicao=false'">
+            onclick="return document.getElementById('formEdicaoUsuario').action = 'editarUsuario?acao=cancelar&flagEdicao=true'">
         Cancelar
     </button>
 </form>
@@ -97,8 +96,21 @@
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
-        document.getElementById('formCadastroUsuario').reset();
+        document.getElementById('formEdicaoUsuario').reset();
         return false;
+    }
+
+    function mensagemEmailExistente() {
+
+        var texto = ''
+        texto+='${msgCadastro}'
+
+        if (texto != '') {
+            var divDangerLogin = document.getElementById('divResultado')
+            divDangerLogin.setAttribute('class', "alert alert-danger")
+            divDangerLogin.setAttribute('role', "alert")
+            divDangerLogin.innerText =texto
+        }
     }
 
     function carregarIdades() {
@@ -114,18 +126,6 @@
 
     }
 
-    function mensagemEmailExistente() {
-
-        var texto = ''
-        texto+='${msgCadastro}'
-
-        if (texto != '') {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText =texto
-        }
-    }
 
     function statusBotao() {
         flagBotaoCancelar = true
@@ -179,7 +179,6 @@
         }
 
     }
-
 
     function consultaCep() {
 

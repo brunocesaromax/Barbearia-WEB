@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/logarOuCadastrar")
@@ -30,7 +31,11 @@ public class Login extends HttpServlet {
             Usuario usuarioBD = usuarioDao.getByEmailAndSenha(email,senha);
 
             if (usuarioBD != null){
-                requestDispatcher = request.getRequestDispatcher("/paginaInicialUsuario.jsp");
+                //Adiciona usuário logado na seção
+                HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+                HttpSession session = httpServletRequest.getSession();
+                session.setAttribute("usuario",usuarioBD);
+                requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
                 requestDispatcher.forward(request,response);
                 return;
             }else {

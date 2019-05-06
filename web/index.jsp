@@ -2,18 +2,19 @@
 <html>
 <head>
     <title>Gerenciador de Universidade</title>
+    <meta http-equiv= "Content-Type" content= "text/html; charset=UTF-8" >
     <link rel="stylesheet" href="style/bootstrap.min.css">
     <script src="script/bootstrap.min.js"></script>
 </head>
 <body class="text-center">
-<form action="logarOuCadastrar" class="form-control" id="formLoginCadastro" method="post">
+<form action="logarOuCadastrar" class="form-control" id="formLoginCadastro" method="post" acceptcharset="ISO-8859-1">
     <h1 class="h3 mb-3 font-weight-normal">Login</h1>
 
     <label for="email" class="sr-only">Email address</label>
-    <input type="text" id="email" class="form-control" placeholder="Email address" required autofocus>
+    <input type="text" id="email" name="email" class="form-control" placeholder="Email address" required autofocus>
 
     <label for="senha" class="sr-only">Password</label>
-    <input type="password" id="senha" class="form-control" placeholder="Password" required>
+    <input type="password" id="senha" name="senha" class="form-control" placeholder="Password" required>
 
     <%--<div class="checkbox mb-3">
         <label>
