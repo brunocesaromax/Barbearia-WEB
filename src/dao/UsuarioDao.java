@@ -16,22 +16,41 @@ public class UsuarioDao {
         connection = SingleConnection.getConnection();
     }
 
-    public void salvar(Usuario usuario) {
+    public void salvarOuAtualizar(Usuario usuario) {
 
         try {
-            String sql = "insert into usuario(email,senha,nome,cep,rua,bairro,cidade,estado,idade) values (?,?,?,?,?,?,?,?,?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, usuario.getEmail());
-            statement.setString(2, usuario.getSenha());
-            statement.setString(3, usuario.getNome());
-            statement.setString(4, usuario.getCep());
-            statement.setString(5, usuario.getRua());
-            statement.setString(6, usuario.getBairro());
-            statement.setString(7, usuario.getCidade());
-            statement.setString(8, usuario.getEstado());
-            statement.setLong(9, usuario.getIdade());
 
-            statement.execute();
+            String sql;
+
+            if (usuario.getId() == null) {
+                sql = "insert into usuario(email,senha,nome,cep,rua,bairro,cidade,estado,idade) values (?,?,?,?,?,?,?,?,?)";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, usuario.getEmail());
+                statement.setString(2, usuario.getSenha());
+                statement.setString(3, usuario.getNome());
+                statement.setString(4, usuario.getCep());
+                statement.setString(5, usuario.getRua());
+                statement.setString(6, usuario.getBairro());
+                statement.setString(7, usuario.getCidade());
+                statement.setString(8, usuario.getEstado());
+                statement.setLong(9, usuario.getIdade());
+                statement.execute();
+            } else {
+                sql = "UPDATE usuario SET email = ?,senha = ?,nome =?,cep=?,rua=?,bairro=?,cidade=?,estado=?,idade=? WHERE id = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, usuario.getEmail());
+                statement.setString(2, usuario.getSenha());
+                statement.setString(3, usuario.getNome());
+                statement.setString(4, usuario.getCep());
+                statement.setString(5, usuario.getRua());
+                statement.setString(6, usuario.getBairro());
+                statement.setString(7, usuario.getCidade());
+                statement.setString(8, usuario.getEstado());
+                statement.setLong(9, usuario.getIdade());
+                statement.setLong(10, usuario.getId());
+                statement.execute();
+            }
+
             connection.commit();
 
         } catch (SQLException e) {
@@ -83,6 +102,9 @@ public class UsuarioDao {
             if (resultSet.next()) {
                 Usuario usuario = new Usuario();
                 usuario.setId(resultSet.getLong("id"));
+                usuario.setNome(resultSet.getString("nome"));
+                usuario.setEmail(resultSet.getString("email"));
+
                 return usuario;
             }
 
@@ -108,6 +130,14 @@ public class UsuarioDao {
                 Usuario usuario = new Usuario();
                 usuario.setId(resultSet.getLong("id"));
                 usuario.setNome(resultSet.getString("nome"));
+                usuario.setEmail(resultSet.getString("email"));
+                usuario.setIdade(resultSet.getInt("idade"));
+                usuario.setSenha(resultSet.getString("senha"));
+                usuario.setRua(resultSet.getString("rua"));
+                usuario.setBairro(resultSet.getString("bairro"));
+                usuario.setCidade(resultSet.getString("cidade"));
+                usuario.setEstado(resultSet.getString("estado"));
+                usuario.setCep(resultSet.getString("cep"));
                 return usuario;
             }
 

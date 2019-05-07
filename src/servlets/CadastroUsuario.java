@@ -46,7 +46,7 @@ public class CadastroUsuario extends HttpServlet {
             usuario.setRua(rua);
             usuario.setSenha(senha);
             usuario.setIdade(idade);
-            usuarioDao.salvar(usuario);
+            usuarioDao.salvarOuAtualizar(usuario);
 
             if (acao.equalsIgnoreCase("editar")) {
                 requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");

@@ -22,12 +22,12 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome">
+            <input type="text" class="form-control" id="nome" name="nome" value="${usuarioSessao.nome}" placeholder="Nome">
             <div id="erro-nome"></div>
         </div>
         <div class="form-group col-md-1">
             <label for="idade">Idade</label>
-            <select id="idade" name="idade" class="form-control" onclick="carregarIdades()">
+            <select id="idade" name="idade" value="${usuarioSessao.idade}" class="form-control" onclick="carregarIdades()">
                 <option selected="16">16</option>
             </select>
         </div>
@@ -36,36 +36,36 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="Email">
+            <input type="text" class="form-control" id="email" name="email" value="${usuarioSessao.email}" placeholder="Email">
         </div>
         <div class="form-group col-md-6">
             <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+            <input type="password" class="form-control" id="senha" name="senha" value="${usuarioSessao.senha}" placeholder="Senha">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="rua">Rua</label>
-            <input type="text" class="form-control" id="rua" name="rua" placeholder="Rua X">
+            <input type="text" class="form-control" id="rua" name="rua" value="${usuarioSessao.rua}" placeholder="Rua X">
         </div>
         <div class="form-group col-md-6">
             <label for="bairro">Bairro</label>
-            <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Setor XYZ">
+            <input type="text" class="form-control" id="bairro" name="bairro" value="${usuarioSessao.bairro}" placeholder="Setor XYZ">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="cidade">Cidade</label>
-            <input type="text" class="form-control" id="cidade" name="cidade">
+            <input type="text" class="form-control" id="cidade" name="cidade" value="${usuarioSessao.cidade}">
         </div>
         <div class="form-group col-md-4">
             <label for="estado">Estado</label>
-            <input type="text" class="form-control" id="estado" name="estado">
+            <input type="text" class="form-control" id="estado" name="estado" value="${usuarioSessao.estado}">
 
         </div>
         <div class="form-group col-md-2">
             <label for="cep">CEP</label>
-            <input type="text" class="form-control" id="cep" name="cep" onblur="consultaCep()">
+            <input type="text" class="form-control" id="cep" name="cep" value="${usuarioSessao.cep}" onblur="consultaCep()">
         </div>
     </div>
 

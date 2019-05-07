@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style/bootstrap.min.css">
     <script src="script/bootstrap.min.js"></script>
 </head>
+
 <body class="text-center">
 <form action="logarOuCadastrar" class="form-control" id="formLoginCadastro" method="post" acceptcharset="ISO-8859-1">
     <h1 class="h3 mb-3 font-weight-normal">Login</h1>

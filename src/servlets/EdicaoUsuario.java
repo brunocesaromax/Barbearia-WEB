@@ -20,33 +20,42 @@ public class EdicaoUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
+        Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
         RequestDispatcher requestDispatcher = null;
 
         String email = request.getParameter("email");
 
+        String nome = request.getParameter("nome");
+        int idade = Integer.parseInt(request.getParameter("idade"));
+        String senha = request.getParameter("senha");
+        String rua = request.getParameter("rua");
+        String bairro = request.getParameter("bairro");
+        String cidade = request.getParameter("cidade");
+        String estado = request.getParameter("estado");
+        String cep = request.getParameter("cep");
+
+        Usuario usuario = new Usuario();
+        usuario.setBairro(bairro);
+        usuario.setCep(cep);
+        usuario.setCidade(cidade);
+        usuario.setEstado(estado);
+        usuario.setEmail(email);
+        usuario.setNome(nome);
+        usuario.setRua(rua);
+        usuario.setSenha(senha);
+        usuario.setIdade(idade);
+
         if ((acao.equalsIgnoreCase("cadastrar") || acao.equalsIgnoreCase("editar"))
-                && usuarioDao.getByEmail(email) == null) { //todo: verificar para usuário logado da seção
+                && (usuarioDao.getByEmail(email) == null || usuarioSessao.getEmail().equalsIgnoreCase(email))) {
 
-            String nome = request.getParameter("nome");
-            int idade = Integer.parseInt(request.getParameter("idade"));
-            String senha = request.getParameter("senha");
-            String rua = request.getParameter("rua");
-            String bairro = request.getParameter("bairro");
-            String cidade = request.getParameter("cidade");
-            String estado = request.getParameter("estado");
-            String cep = request.getParameter("cep");
+            if (usuarioSessao != null) {
+                usuario.setId(usuarioSessao.getId());
+            }
 
-            Usuario usuario = new Usuario();
-            usuario.setBairro(bairro);
-            usuario.setCep(cep);
-            usuario.setCidade(cidade);
-            usuario.setEstado(estado);
-            usuario.setEmail(email);
-            usuario.setNome(nome);
-            usuario.setRua(rua);
-            usuario.setSenha(senha);
-            usuario.setIdade(idade);
-            usuarioDao.salvar(usuario);
+            usuarioDao.salvarOuAtualizar(usuario);
+
+            /*Atualizando o usuário da sessão*/
+            request.getSession().setAttribute("usuarioSessao", usuario);
 
             if (acao.equalsIgnoreCase("editar")) {
                 requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
@@ -58,7 +67,7 @@ public class EdicaoUsuario extends HttpServlet {
                 && usuarioDao.getByEmail(email) != null) {
 
 
-            request.setAttribute("msgCadastro", "Já existe um usuário cadastrado com o email inserido. Tente com outro email.");
+            request.setAttribute("msgCadastro", "Já existe outro usuário cadastrado com o email inserido. Tente com outro email.");
             if (acao.equalsIgnoreCase("cadastrar")) {
                 requestDispatcher = request.getRequestDispatcher("/logarOuCadastrar?acao=cadastrar");
             } else {

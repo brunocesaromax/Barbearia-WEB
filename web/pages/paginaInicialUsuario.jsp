@@ -1,7 +1,9 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Accordion Menu</title>
 
 
@@ -109,6 +111,10 @@
             color: #aeb2b7;
         }
 
+        h1 {
+            color: white;
+        }
+
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
@@ -116,43 +122,36 @@
 </head>
 
 <body>
+<h1 style="">Bem vindo: ${usuarioSessao.nome}</h1>
+
 <aside class="sidebar">
+
     <div id="leftside-navigation" class="nano">
         <ul class="nano-content">
             <li>
-                <a href="/gerenciador_universidade/pages/paginaInicialUsuario.jsp"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+                <a href="/gerenciador_barbearia/pages/paginaInicialUsuario.jsp"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
             </li>
             <li class="sub-menu">
-                <a href="/gerenciador_universidade/pages/editarUsuario.jsp"><i class="fa fa-cogs"></i><span>Editar Perfil</span><i
-                        class="arrow fa fa-angle-right pull-right"></i></a>
+                <a href="/gerenciador_barbearia/pages/editarUsuario.jsp"><i
+                        class="fa fa-cogs"></i><span>Editar Perfil</span><i></i></a>
 
             </li>
             <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-table"></i><span>Tables</span><i
-                        class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="tables-basic.html">Basic Tables</a>
-                    </li>
-
-                    <li><a href="tables-data.html">Data Tables</a>
-                    </li>
-                </ul>
+                <a href="/gerenciador_barbearia/pages/agendamento.jsp"><i
+                        class="fa fa-table"></i><span>Agendamentos</span><i
+                ></i></a>
             </li>
             <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa fa-tasks"></i><span>Forms</span><i
+                <a href="javascript:void(0);"><i class="fa fa fa-tasks"></i><span>Relatórios</span><i
                         class="arrow fa fa-angle-right pull-right"></i></a>
                 <ul>
-                    <li><a href="forms-components.html">Components</a>
+                    <li><a href="forms-components.html">Últimos 7 dias</a>
                     </li>
-                    <li><a href="forms-validation.html">Validation</a>
+                    <li><a href="forms-validation.html">Últimos 15 dias</a>
                     </li>
-                    <li><a href="forms-mask.html">Mask</a>
+                    <li><a href="forms-mask.html">Último mês</a>
                     </li>
-                    <li><a href="forms-wizard.html">Wizard</a>
-                    </li>
-                    <li><a href="forms-multiple-file.html">Multiple File Upload</a>
-                    </li>
-                    <li><a href="forms-wysiwyg.html">WYSIWYG Editor</a>
+                    <li><a href="forms-wizard.html">Último ano</a>
                     </li>
                 </ul>
             </li>
@@ -163,50 +162,6 @@
                     <li class="active"><a href="mail-inbox.html">Inbox</a>
                     </li>
                     <li><a href="mail-compose.html">Compose Mail</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-bar-chart-o"></i><span>Charts</span><i
-                        class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="charts-chartjs.html">Chartjs</a>
-                    </li>
-                    <li><a href="charts-morris.html">Morris</a>
-                    </li>
-                    <li><a href="charts-c3.html">C3 Charts</a></li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-map-marker"></i><span>Maps</span><i
-                        class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="map-google.html">Google Map</a>
-                    </li>
-                    <li><a href="map-vector.html">Vector Map</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a href="typography.html"><i class="fa fa-text-height"></i><span>Typography</span></a>
-            </li>
-            <li class="sub-menu">
-                <a href="javascript:void(0);"><i class="fa fa-file"></i><span>Pages</span><i
-                        class="arrow fa fa-angle-right pull-right"></i></a>
-                <ul>
-                    <li><a href="pages-blank.html">Blank Page</a>
-                    </li>
-                    <li><a href="pages-login.html">Login</a>
-                    </li>
-                    <li><a href="pages-sign-up.html">Sign Up</a>
-                    </li>
-                    <li><a href="pages-calendar.html">Calendar</a>
-                    </li>
-                    <li><a href="pages-timeline.html">Timeline</a>
-                    </li>
-                    <li><a href="pages-404.html">404</a>
-                    </li>
-                    <li><a href="pages-500.html">500</a>
                     </li>
                 </ul>
             </li>

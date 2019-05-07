@@ -31,10 +31,8 @@ public class Login extends HttpServlet {
             Usuario usuarioBD = usuarioDao.getByEmailAndSenha(email,senha);
 
             if (usuarioBD != null){
-                //Adiciona usuário logado na seção
-                HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-                HttpSession session = httpServletRequest.getSession();
-                session.setAttribute("usuario",usuarioBD);
+                request.getSession().setAttribute("usuarioSessao",usuarioBD);
+                request.setAttribute("usuarioSessao",usuarioBD);
                 requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
                 requestDispatcher.forward(request,response);
                 return;
