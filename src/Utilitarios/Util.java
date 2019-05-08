@@ -27,6 +27,8 @@ public class Util {
 
     public static float getFloatSemVirgulas(String valor) {
 
+        valor = valor.replace("R$","");
+
         if (valor.contains(",")) {
             valor = valor.replace(',', '.');
         }

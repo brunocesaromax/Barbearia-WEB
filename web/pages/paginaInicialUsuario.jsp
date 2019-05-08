@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Accordion Menu</title>
+    <title>Menu principal</title>
 
 
     <link rel='stylesheet prefetch'
