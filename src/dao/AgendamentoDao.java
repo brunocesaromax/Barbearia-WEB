@@ -20,16 +20,17 @@ public class AgendamentoDao {
         java.sql.Timestamp date;
 
         try {
-            String sql = "INSERT INTO AgendamentoServlet (nomeCliente, valor, data, servico, observacao, barbeiro_id) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO agendamento (nomeCliente, valor, data, servico, horario, observacao, barbeiro_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, agendamento.getNomeCliente());
-            statement.setString(2, String.valueOf(agendamento.getValor()));
+            statement.setFloat(2, agendamento.getValor());
             date = new java.sql.Timestamp(agendamento.getData().getTime());// Uso de timestamp para persistir também hora e minuto
             statement.setTimestamp(3, date);
             statement.setInt(4, agendamento.getServico().ordinal());
-            statement.setString(5, agendamento.getObservacao());
-            statement.setLong(6, agendamento.getUsuario().getId());
+            statement.setString(5, agendamento.getHorario());
+            statement.setString(6, agendamento.getObservacao());
+            statement.setLong(7, agendamento.getUsuario().getId());
 
             statement.execute();
             connection.commit();
@@ -44,7 +45,7 @@ public class AgendamentoDao {
         java.sql.Timestamp date;
 
         try {
-            String sql = "UPDATE AgendamentoServlet SET nomeCliente=?, valor=?, data=?, servico=?, "
+            String sql = "UPDATE agendamento SET nomeCliente=?, valor=?, data=?, servico=?, "
                     + " observacao=? WHERE id=?";
 
             PreparedStatement statement = null;
@@ -65,11 +66,11 @@ public class AgendamentoDao {
         }
     }
 
-    public ArrayList<Agendamento> findAllByIdBarbeiro(Long idBarbeiro, int qtdDias) {
+    /*public ArrayList<Agendamento> findAllByIdBarbeiro(Long idBarbeiro, int qtdDias) {
 
         ArrayList<Agendamento> agendamentos = new ArrayList<>();
 
-        StringBuilder sql = new StringBuilder("SELECT * FROM AgendamentoServlet WHERE barbeiro_id = " + idBarbeiro);
+        StringBuilder sql = new StringBuilder("SELECT * FROM agendamento WHERE barbeiro_id = " + idBarbeiro);
         String clausulaOrderBy = " ORDER BY data";
 
         switch (qtdDias) {
@@ -115,6 +116,36 @@ public class AgendamentoDao {
 
         }
         return agendamentos;
+    }*/
+
+    public ArrayList<Agendamento> findAllByIdBarbeiro(Long idBarbeiro) {
+
+        ArrayList<Agendamento> agendamentos = new ArrayList<>();
+
+        String sql = "SELECT * FROM agendamento WHERE barbeiro_id = " + idBarbeiro + " ORDER BY data";
+
+        try {
+            Statement statement = null;
+            statement = connection.prepareStatement(sql);
+            ResultSet result = ((PreparedStatement) statement).executeQuery();
+
+            while (result.next()) {
+                Agendamento agendamento = new Agendamento();
+                agendamento.setId(result.getLong("id"));
+                agendamento.setNomeCliente(result.getString("nomecliente"));
+                agendamento.setValor(result.getFloat("valor"));
+                agendamento.setData(result.getTimestamp("data"));
+                agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
+                agendamento.setHorario(result.getString("horario"));
+                agendamento.setObservacao(result.getString("observacao"));
+                agendamentos.add(agendamento);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return agendamentos;
     }
 
     public int numeroAgendamentosEmAtrito(Long idBarbeiro, Date data) {
@@ -124,7 +155,7 @@ public class AgendamentoDao {
 
         try {
             date = new java.sql.Timestamp(data.getTime());// Uso de timestamp para persistir também hora e minuto
-            String sql = "SELECT COUNT(*) FROM AgendamentoServlet WHERE barbeiro_id = 5 AND ('" + date + "' BETWEEN data AND DATE_ADD(data, INTERVAL 40 MINUTE)) OR ('" + date + "' BETWEEN DATE_SUB(data, INTERVAL 40 MINUTE) AND data);";
+            String sql = "SELECT COUNT(*) FROM agendamento WHERE barbeiro_id = 5 AND ('" + date + "' BETWEEN data AND DATE_ADD(data, INTERVAL 40 MINUTE)) OR ('" + date + "' BETWEEN DATE_SUB(data, INTERVAL 40 MINUTE) AND data);";
             Statement statement = null;
             statement = connection.prepareStatement(sql);
             ResultSet result = statement.executeQuery(sql);
@@ -147,7 +178,7 @@ public class AgendamentoDao {
         //A instrução try -with-resources, que fechará a conexão automaticamente
         try (Connection conn = SingleConnection.getConnection()) {
 
-            String sql = "SELECT * FROM AgendamentoServlet WHERE id =" + id;
+            String sql = "SELECT * FROM agendamento WHERE id =" + id;
 
             Statement statement = conn.prepareStatement(sql);
             ResultSet result = statement.executeQuery(sql);
@@ -175,7 +206,7 @@ public class AgendamentoDao {
         //A instrução try -with-resources, que fechará a conexão automaticamente
         try (Connection conn = ConeccaoMySql.getConexaoMySQL()) {
 
-            String sql = "DELETE FROM AgendamentoServlet WHERE CURRENT_TIMESTAMP() > DATE_ADD(data, INTERVAL 7 DAY)";
+            String sql = "DELETE FROM agendamento WHERE CURRENT_TIMESTAMP() > DATE_ADD(data, INTERVAL 7 DAY)";
             PreparedStatement statement = conn.prepareStatement(sql);
             //statement.setString(1, String.valueOf(id));
             int rowsDeleted = statement.executeUpdate();
@@ -192,7 +223,7 @@ public class AgendamentoDao {
 
         try {
 
-            String sql = "DELETE FROM AgendamentoServlet WHERE id = ?";
+            String sql = "DELETE FROM agendamento WHERE id = ?";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
@@ -212,11 +243,11 @@ public class AgendamentoDao {
         java.sql.Timestamp dataInicioSQL;
         java.sql.Timestamp dataFimSQL;
 
-            dataInicioSQL = new java.sql.Timestamp(dataInicio.getTime());
-            dataFimSQL = new java.sql.Timestamp(dataFim.getTime());
+        dataInicioSQL = new java.sql.Timestamp(dataInicio.getTime());
+        dataFimSQL = new java.sql.Timestamp(dataFim.getTime());
 
         try {
-            String sql = "SELECT * FROM AgendamentoServlet WHERE barbeiro_id = " + idBarbeiro + " AND data BETWEEN '" + dataInicioSQL + "' AND DATE_ADD('" + dataFimSQL + "', INTERVAL 1 DAY) ORDER BY data";
+            String sql = "SELECT * FROM agendamento WHERE barbeiro_id = " + idBarbeiro + " AND data BETWEEN '" + dataInicioSQL + "' AND DATE_ADD('" + dataFimSQL + "', INTERVAL 1 DAY) ORDER BY data";
             Statement statement = null;
             statement = connection.prepareStatement(sql);
             ResultSet result = statement.executeQuery(sql);

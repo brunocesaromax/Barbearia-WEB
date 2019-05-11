@@ -30,8 +30,9 @@ public class AgendamentoServlet extends HttpServlet {
 
             String nomeCliente = request.getParameter("nomeCliente");
             EnumServico servico = EnumServico.valor(request.getParameter("servico"));
-            Date data = Util.getDataFormatada(request.getParameter("data"));
+            Date data = Util.getDataFormatada(request.getParameter("data") + " 00:00");
             float valor = Util.getFloatSemVirgulas(request.getParameter("valor"));
+            String horario = request.getParameter("horario");
             String observacao = request.getParameter("observacao");
 
             Agendamento agendamento = new Agendamento();
@@ -39,6 +40,7 @@ public class AgendamentoServlet extends HttpServlet {
             agendamento.setServico(servico);
             agendamento.setData(data);
             agendamento.setValor(valor);
+            agendamento.setHorario(horario);
             agendamento.setObservacao(observacao);
 
             Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
@@ -46,6 +48,7 @@ public class AgendamentoServlet extends HttpServlet {
 
             agendamentoDao.salvar(agendamento);
 
+            request.setAttribute("agendamentos",agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId()));
             requestDispatcher = request.getRequestDispatcher("/pages/agendamento.jsp");
 
         }
@@ -55,6 +58,18 @@ public class AgendamentoServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
+
+        String acao = request.getParameter("acao");
+
+        if (acao.equalsIgnoreCase("listar")) {
+
+            Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
+            request.setAttribute("agendamentos", agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId()));
+            RequestDispatcher requestDispatcher = null;
+
+            requestDispatcher = request.getRequestDispatcher("/pages/agendamento.jsp");
+            requestDispatcher.forward(request, response);
+        }
 
     }
 }

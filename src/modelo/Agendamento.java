@@ -11,6 +11,7 @@ public class Agendamento {
     private float valor;
     private Date data;
     private EnumServico servico;
+    private String horario;
     private String observacao;
     private Usuario usuario;//Barbeiro
 
@@ -86,4 +87,11 @@ public class Agendamento {
         this.usuario = usuario;
     }
 
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
 }

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -6,13 +7,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <link rel="stylesheet" href="../style/bootstrap.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css"/>
 
     <script src="../script/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrit,y="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
     <script src="https://cdn.rawgit.com/plentz/jquery-maskmoney/master/dist/jquery.maskMoney.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+    <script src='../script/jquery.mask.min.js'></script>
 
 </head>
 <body class="bg-light align-content-center">
@@ -68,20 +71,42 @@
             onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=cadastrar'">
         Cadastrar
     </button>
-    <button type="submit" class="btn btn-secondary"
-            onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=editar'">
-        Editar
-    </button>
-    <button type="submit" class="btn btn-danger"
-            onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=excluir'">
-        Excluir
-    </button>
-    <button id="botaoCancelar" type="submit" class="btn btn-warning"
-            onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=cancelar'">
+    <button id="botaoCancelar" type="reset" class="btn btn-danger">
         Cancelar
     </button>
 </form>
 
+<br/>
+
+<h2 align="center">Tabela de agendamentos</h2>
+
+<!-- Apresentando a tabela através do jstl-->
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Nome do Cliente</th>
+        <th scope="col">Serviço</th>
+        <th scope="col">Data</th>
+        <th scope="col">Valor R$</th>
+        <th scope="col">Horário</th>
+        <th scope="col">Observação</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <c:forEach items="${agendamentos}" var="agendamento">
+        <tr>
+                <%--<th scope="row">1</th>--%>
+            <td><c:out value="${agendamento.nomeCliente}"></c:out></td>
+            <td><c:out value="${agendamento.servico}"></c:out></td>
+            <td><c:out value="${agendamento.data}"></c:out></td>
+            <td><c:out value="${agendamento.valor}"></c:out></td>
+            <td><c:out value="${agendamento.horario}"></c:out></td>
+            <td><c:out value="${agendamento.observacao}"></c:out></td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
 
 <script type="application/javascript">
 
@@ -141,8 +166,11 @@
         if (document.getElementById("valor").value === '') {
             erro += 'Informe a valor do serviço.\n'
         }
-        if (document.getElementById("data").value === '') {
-            erro += 'Informe a data do serviço.\n'
+        if (document.getElementById("data").value === '' || !ValidaData()) {
+            erro += 'Informe uma data correta para o serviço.\n'
+        }
+        if (document.getElementById("horario").value === '' || !Mascara_Hora('horario')) {
+            erro += 'Informe um horário correto.\n'
         }
         if (document.getElementById("servico").value === '') {
             erro += 'Informe o serviço.\n'
@@ -162,6 +190,46 @@
     }
 
     $(document).ready(function () {
+        $("#horario").mask("99:99");
+    });
+
+    function Mascara_Hora(Campo) {
+
+        var hora01 = '';
+        var Hora = document.getElementById(Campo).value;
+        hora01 = hora01 + Hora;
+
+        if (hora01.length == 2) {
+            hora01 = hora01 + ':';
+            Hora = hora01;
+        }
+        if (hora01.length == 5) {
+            return Verifica_Hora(Campo);
+        }
+    }
+
+    function Verifica_Hora(Campo) {
+
+        Hora = document.getElementById(Campo);
+        hrs = (Hora.value.substring(0, 2));
+        min = (Hora.value.substring(3, 5));
+
+        estado = "";
+        if ((hrs < 00) || (hrs > 23) || (min < 00) || (min > 59)) {
+            estado = "errada";
+        }
+        if (Hora == "") {
+            estado = "errada";
+        }
+        if (estado == "errada") {
+            document.getElementById(Campo).focus();
+            return false
+        }
+
+        return true
+    }
+
+    $(document).ready(function () {
         $('#data').mask('99/99/9999');
         return false;
     });
@@ -174,11 +242,34 @@
         });
     });
 
-    //todo: revisar a máscara de horario
-    /*$(document).ready(function(){
-        $("#horario").inputmask("h:s",{ "placeholder": "hh/mm" });
-    });*/
+    $(function () {
+        $("#data").datepicker({dateFormat: 'dd/mm/yy'});
+    });
 
+    function ValidaData() {
+
+        var data = document.getElementById('data').value;
+
+        reg = /[^\d\/\.]/gi;                  // Mascara = dd/mm/aaaa | dd.mm.aaaa
+        var valida = data.replace(reg, '');    // aplica mascara e valida só numeros
+        if (valida && valida.length == 10) {  // é válida, então ;)
+            var ano = data.substr(6),
+                mes = data.substr(3, 2),
+                dia = data.substr(0, 2),
+                M30 = ['04', '06', '09', '11'],
+                v_mes = /(0[1-9])|(1[0-2])/.test(mes),
+                v_ano = /(19[1-9]\d)|(20\d\d)|2100/.test(ano),
+                rexpr = new RegExp(mes),
+                fev29 = ano % 4 ? 28 : 29;
+
+            if (v_mes && v_ano) {
+                if (mes == '02') return (dia >= 1 && dia <= fev29);
+                else if (rexpr.test(M30)) return /((0[1-9])|([1-2]\d)|30)/.test(dia);
+                else return /((0[1-9])|([1-2]\d)|3[0-1])/.test(dia);
+            }
+        }
+        return false                           // se inválida :(
+    }
 
 </script>
 </body>

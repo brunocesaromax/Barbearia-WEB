@@ -137,7 +137,7 @@
 
             </li>
             <li class="sub-menu">
-                <a href="/gerenciador_barbearia/pages/agendamento.jsp"><i
+                <a href="/gerenciador_barbearia/pages/agendamento?acao=listar"><i
                         class="fa fa-table"></i><span>Agendamentos</span><i
                 ></i></a>
             </li>
