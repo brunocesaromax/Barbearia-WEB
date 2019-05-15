@@ -28,7 +28,7 @@
         <div class="form-group col-md-1">
             <label for="idade">Idade</label>
             <select id="idade" name="idade" value="${usuarioSessao.idade}" class="form-control" onclick="carregarIdades()">
-                <option selected="16">16</option>
+                <option selected="${usuarioSessao.idade}">${usuarioSessao.idade}</option>
             </select>
         </div>
 
@@ -76,23 +76,21 @@
             onclick="return document.getElementById('formEdicaoUsuario').action = 'editarUsuario?acao=editar'">
         Editar
     </button>
-    <button id="botaoCancelar" type="submit" class="btn btn-danger"
-            onclick="return document.getElementById('formEdicaoUsuario').action = 'editarUsuario?acao=cancelar&flagEdicao=true'">
-        Cancelar
+    <button id="botaoVoltar" type="button" class="btn btn-secondary"
+            onclick="redirecionarPaginaInicial();">
+        Voltar
     </button>
 </form>
 
 
 <script type="application/javascript">
 
-    var botao = document.getElementById('botaoCancelar')
-    botao.addEventListener('click', statusBotao)
-
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
     var flagBotaoCancelar = false
 
     limparCampos()
     mensagemEmailExistente()
+    mensagemSucessoEdicao()
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -113,22 +111,30 @@
         }
     }
 
+    function mensagemSucessoEdicao() {
+
+        var texto = ''
+        texto+='${msgSucessoEdicao}'
+
+        if (texto != '') {
+            var divDangerLogin = document.getElementById('divResultado')
+            divDangerLogin.setAttribute('class', "alert alert-success")
+            divDangerLogin.setAttribute('role', "alert")
+            divDangerLogin.innerText =texto
+        }
+    }
+
     function carregarIdades() {
 
         var element = document.getElementById('idade')
 
-        for (i = 17; i <= 99; i++) {
+        for (i = 16; i <= 99; i++) {
             var opcao = document.createElement('option')
             opcao.value = i
             opcao.innerHTML = i
             element.appendChild(opcao)
         }
 
-    }
-
-
-    function statusBotao() {
-        flagBotaoCancelar = true
     }
 
     function validaCampos() {
@@ -209,6 +215,10 @@
         });
     }
 
+    function redirecionarPaginaInicial() {
+        // Faz um redirecionamento sem adicionar a página original ao histórico de navegação do browser.
+        window.location.replace("/gerenciador_barbearia/pages/paginaInicialUsuario.jsp");
+    }
 
 </script>
 </body>

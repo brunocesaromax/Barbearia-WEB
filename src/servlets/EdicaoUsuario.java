@@ -58,7 +58,8 @@ public class EdicaoUsuario extends HttpServlet {
             request.getSession().setAttribute("usuarioSessao", usuario);
 
             if (acao.equalsIgnoreCase("editar")) {
-                requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
+                request.setAttribute("msgSucessoEdicao","Edição feita com sucesso.");
+                requestDispatcher = request.getRequestDispatcher("/pages/editarUsuario.jsp");
             } else {
                 requestDispatcher = request.getRequestDispatcher("/index.jsp");
             }

@@ -51,7 +51,8 @@ public class CadastroUsuario extends HttpServlet {
             if (acao.equalsIgnoreCase("editar")) {
                 requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
             } else {
-                requestDispatcher = request.getRequestDispatcher("/index.jsp");
+                request.setAttribute("msgSucessoCadastro","Cadastro feito com sucesso.");
+                requestDispatcher = request.getRequestDispatcher("/pages/cadastroUsuario.jsp");
             }
 
         } else if ((acao.equalsIgnoreCase("cadastrar") || acao.equalsIgnoreCase("editar"))

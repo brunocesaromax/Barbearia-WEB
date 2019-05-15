@@ -41,8 +41,8 @@
     </div>
     <div class="form-row">
         <div class="form-group col-sm-2">
-            <label for="data">Data</label>
-            <input type="text" class="form-control" id="data" name="data" placeholder="03/05/2019">
+            <label for="dataServico">Data</label>
+            <input type="text" class="form-control" id="dataServico" name="dataServico" placeholder="03/05/2019">
         </div>
 
         <div class="form-group col-md-2">
@@ -99,7 +99,7 @@
                 <%--<th scope="row">1</th>--%>
             <td><c:out value="${agendamento.nomeCliente}"></c:out></td>
             <td><c:out value="${agendamento.servico}"></c:out></td>
-            <td><c:out value="${agendamento.data}"></c:out></td>
+            <td> <c:out value="${agendamento.dataServico}"></c:out></td>
             <td><c:out value="${agendamento.valor}"></c:out></td>
             <td><c:out value="${agendamento.horario}"></c:out></td>
             <td><c:out value="${agendamento.observacao}"></c:out></td>
@@ -166,8 +166,8 @@
         if (document.getElementById("valor").value === '') {
             erro += 'Informe a valor do serviço.\n'
         }
-        if (document.getElementById("data").value === '' || !ValidaData()) {
-            erro += 'Informe uma data correta para o serviço.\n'
+        if (document.getElementById("dataServico").value === '' || !ValidaData()) {
+            erro += 'Informe uma dataServico correta para o serviço.\n'
         }
         if (document.getElementById("horario").value === '' || !Mascara_Hora('horario')) {
             erro += 'Informe um horário correto.\n'
@@ -230,7 +230,7 @@
     }
 
     $(document).ready(function () {
-        $('#data').mask('99/99/9999');
+        $('#dataServico').mask('99/99/9999');
         return false;
     });
 
@@ -243,19 +243,19 @@
     });
 
     $(function () {
-        $("#data").datepicker({dateFormat: 'dd/mm/yy'});
+        $("#dataServico").datepicker({dateFormat: 'dd/mm/yy'});
     });
 
     function ValidaData() {
 
-        var data = document.getElementById('data').value;
+        var dataServico = document.getElementById('dataServico').value;
 
         reg = /[^\d\/\.]/gi;                  // Mascara = dd/mm/aaaa | dd.mm.aaaa
-        var valida = data.replace(reg, '');    // aplica mascara e valida só numeros
+        var valida = dataServico.replace(reg, '');    // aplica mascara e valida só numeros
         if (valida && valida.length == 10) {  // é válida, então ;)
-            var ano = data.substr(6),
-                mes = data.substr(3, 2),
-                dia = data.substr(0, 2),
+            var ano = dataServico.substr(6),
+                mes = dataServico.substr(3, 2),
+                dia = dataServico.substr(0, 2),
                 M30 = ['04', '06', '09', '11'],
                 v_mes = /(0[1-9])|(1[0-2])/.test(mes),
                 v_ano = /(19[1-9]\d)|(20\d\d)|2100/.test(ano),
@@ -270,6 +270,16 @@
         }
         return false                           // se inválida :(
     }
+  /*
+    function formataData() {
+        var data = ${dataServico}
+
+        novaData= data.split(' ')[0].split('-').reverse().join('/')
+
+
+        document.getElementById('dataTabela').innerText(novaData)
+
+    }*/
 
 </script>
 </body>

@@ -20,12 +20,12 @@ public class AgendamentoDao {
         java.sql.Timestamp date;
 
         try {
-            String sql = "INSERT INTO agendamento (nomeCliente, valor, data, servico, horario, observacao, barbeiro_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO agendamento (nomeCliente, valor, dataservico, servico, horario, observacao, barbeiro_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, agendamento.getNomeCliente());
             statement.setFloat(2, agendamento.getValor());
-            date = new java.sql.Timestamp(agendamento.getData().getTime());// Uso de timestamp para persistir também hora e minuto
+            date = new java.sql.Timestamp(agendamento.getDataServico().getTime());// Uso de timestamp para persistir também hora e minuto
             statement.setTimestamp(3, date);
             statement.setInt(4, agendamento.getServico().ordinal());
             statement.setString(5, agendamento.getHorario());
@@ -45,14 +45,14 @@ public class AgendamentoDao {
         java.sql.Timestamp date;
 
         try {
-            String sql = "UPDATE agendamento SET nomeCliente=?, valor=?, data=?, servico=?, "
+            String sql = "UPDATE agendamento SET nomeCliente=?, valor=?, dataservico=?, servico=?, "
                     + " observacao=? WHERE id=?";
 
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, agendamento.getNomeCliente());
             statement.setString(2, String.valueOf(agendamento.getValor()));
-            date = new java.sql.Timestamp(agendamento.getData().getTime());// Uso de timestamp para persistir também hora e minuto
+            date = new java.sql.Timestamp(agendamento.getDataServico().getTime());// Uso de timestamp para persistir também hora e minuto
             statement.setTimestamp(3, date);
             statement.setInt(4, agendamento.getServico().ordinal());
             statement.setString(5, agendamento.getObservacao());
@@ -105,7 +105,7 @@ public class AgendamentoDao {
                 agendamento.setId(result.getLong("id"));
                 agendamento.setNomeCliente(result.getString("nomeCliente"));
                 agendamento.setValor(result.getFloat("valor"));
-                agendamento.setData(result.getTimestamp("data"));
+                agendamento.setDataServico(result.getTimestamp("data"));
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setObservacao(result.getString("observacao"));
                 agendamentos.add(agendamento);
@@ -122,7 +122,7 @@ public class AgendamentoDao {
 
         ArrayList<Agendamento> agendamentos = new ArrayList<>();
 
-        String sql = "SELECT * FROM agendamento WHERE barbeiro_id = " + idBarbeiro + " ORDER BY data";
+        String sql = "SELECT * FROM agendamento WHERE barbeiro_id = " + idBarbeiro + " ORDER BY dataservico";
 
         try {
             Statement statement = null;
@@ -134,7 +134,7 @@ public class AgendamentoDao {
                 agendamento.setId(result.getLong("id"));
                 agendamento.setNomeCliente(result.getString("nomecliente"));
                 agendamento.setValor(result.getFloat("valor"));
-                agendamento.setData(result.getTimestamp("data"));
+                agendamento.setDataServico(result.getTimestamp("dataservico"));
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setHorario(result.getString("horario"));
                 agendamento.setObservacao(result.getString("observacao"));
@@ -188,7 +188,7 @@ public class AgendamentoDao {
                 agendamento.setId(result.getLong("id"));
                 agendamento.setNomeCliente(result.getString("nomeCliente"));
                 agendamento.setValor(result.getFloat("valor"));
-                agendamento.setData(result.getTimestamp("data"));
+                agendamento.setDataServico(result.getTimestamp("data"));
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setObservacao(result.getString("observacao"));
             }
@@ -257,7 +257,7 @@ public class AgendamentoDao {
                 agendamento.setId(result.getLong("id"));
                 agendamento.setNomeCliente(result.getString("nomeCliente"));
                 agendamento.setValor(result.getFloat("valor"));
-                agendamento.setData(result.getTimestamp("data"));
+                agendamento.setDataServico(result.getTimestamp("dataservico"));
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setObservacao(result.getString("observacao"));
                 agendamentos.add(agendamento);

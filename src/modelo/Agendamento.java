@@ -9,16 +9,16 @@ public class Agendamento {
     private Long id;
     private String nomeCliente;
     private float valor;
-    private Date data;
+    private Date dataServico;
     private EnumServico servico;
     private String horario;
     private String observacao;
     private Usuario usuario;//Barbeiro
 
-    public Agendamento(String nomeCliente, float valor, String data, EnumServico servico, String observacao, Usuario usuario) {
+    public Agendamento(String nomeCliente, float valor, String dataServico, EnumServico servico, String observacao, Usuario usuario) {
         this.nomeCliente = nomeCliente;
         this.valor = valor;
-        this.data = Util.getDataFormatada(data);
+        this.dataServico = Util.getDataFormatada(dataServico);
         this.servico = servico;
         this.observacao = observacao;
         this.usuario = usuario;
@@ -55,12 +55,12 @@ public class Agendamento {
         this.valor = valor;
     }
 
-    public Date getData() {
-        return data;
+    public Date getDataServico() {
+        return dataServico;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setDataServico(Date dataServico) {
+        this.dataServico = dataServico;
     }
 
     public EnumServico getServico() {

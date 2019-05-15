@@ -16,6 +16,7 @@
 
 <form action="cadastrarUsuario" id="formCadastroUsuario" onsubmit=" return validaCampos()" method="post"
       accept-charset="ISO-8859-1">
+    <input readonly="readonly" type="hidden" id="url" name="url" value="<%=request.getParameter("url")%>"><%--oculto--%>
     <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Cadastro de usuário</h1>
     <br/>
     <br/>
@@ -77,23 +78,21 @@
             onclick="return document.getElementById('formCadastroUsuario').action = 'cadastrarUsuario?acao=cadastrar'">
         Cadastrar
     </button>
-    <button id="botaoCancelar" type="submit" class="btn btn-danger"
-            onclick="return document.getElementById('formCadastroUsuario').action = 'cadastrarUsuario?acao=cancelar&flagEdicao=false'">
-        Cancelar
+    <button id="botaoVoltar" type="button" class="btn btn-secondary"
+            onclick="redirecionarPaginaInicial();">
+        Voltar
     </button>
 </form>
 
 
 <script type="application/javascript">
 
-    var botao = document.getElementById('botaoCancelar')
-    botao.addEventListener('click', statusBotao)
-
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
     var flagBotaoCancelar = false
 
     limparCampos()
     mensagemEmailExistente()
+    mensagemSucessoCadastro()
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -125,10 +124,6 @@
             divDangerLogin.setAttribute('role', "alert")
             divDangerLogin.innerText =texto
         }
-    }
-
-    function statusBotao() {
-        flagBotaoCancelar = true
     }
 
     function validaCampos() {
@@ -180,7 +175,6 @@
 
     }
 
-
     function consultaCep() {
 
         var cep = $("#cep").val();
@@ -208,6 +202,24 @@
             }
 
         });
+    }
+
+    function redirecionarPaginaInicial() {
+        // Faz um redirecionamento sem adicionar a página original ao histórico de navegação do browser.
+        window.location.replace("/gerenciador_barbearia/index.jsp");
+    }
+
+    function mensagemSucessoCadastro() {
+
+        var texto = ''
+        texto+='${msgSucessoCadastro}'
+
+        if (texto != '') {
+            var divDangerLogin = document.getElementById('divResultado')
+            divDangerLogin.setAttribute('class', "alert alert-success")
+            divDangerLogin.setAttribute('role', "alert")
+            divDangerLogin.innerText =texto
+        }
     }
 
 

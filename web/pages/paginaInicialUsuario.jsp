@@ -155,7 +155,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="sub-menu active">
+            <li class="sub-menu <%--active--%>"><%--Quando quero que o componente ja venha ativado mostrando suas opcções--%>
                 <a href="javascript:void(0);"><i class="fa fa-envelope"></i><span>Mail</span><i
                         class="arrow fa fa-angle-right pull-right"></i></a>
                 <ul>
@@ -164,6 +164,10 @@
                     <li><a href="mail-compose.html">Compose Mail</a>
                     </li>
                 </ul>
+            </li>
+
+            <li class="sub-menu">
+                <a href="/gerenciador_barbearia/logarOuCadastrar?acao=deslogar"><span>Sair</span></a>
             </li>
         </ul>
     </div>

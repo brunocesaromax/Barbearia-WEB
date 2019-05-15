@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/logarOuCadastrar")
@@ -21,7 +20,7 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
-        System.out.println(acao);
+        String url = request.getParameter("url");
         RequestDispatcher requestDispatcher = null;
 
         if (acao.equalsIgnoreCase("logar")){
@@ -33,7 +32,7 @@ public class Login extends HttpServlet {
             if (usuarioBD != null){
                 request.getSession().setAttribute("usuarioSessao",usuarioBD);
                 request.setAttribute("usuarioSessao",usuarioBD);
-                requestDispatcher = request.getRequestDispatcher("/pages/paginaInicialUsuario.jsp");
+                requestDispatcher = request.getRequestDispatcher(url.equals("null") ? "/pages/paginaInicialUsuario.jsp" : url);
                 requestDispatcher.forward(request,response);
                 return;
             }else {
@@ -54,5 +53,13 @@ public class Login extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String acao = request.getParameter("acao");
+
+        if (acao.equalsIgnoreCase("deslogar")){
+
+            request.getSession().invalidate();
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+            requestDispatcher.forward(request,response);
+        }
     }
 }

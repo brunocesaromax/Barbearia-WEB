@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet("/pages/agendamento")
 public class AgendamentoServlet extends HttpServlet {
@@ -30,7 +33,7 @@ public class AgendamentoServlet extends HttpServlet {
 
             String nomeCliente = request.getParameter("nomeCliente");
             EnumServico servico = EnumServico.valor(request.getParameter("servico"));
-            Date data = Util.getDataFormatada(request.getParameter("data") + " 00:00");
+            Date data = Util.getDataFormatada(request.getParameter("dataServico") + " 00:00");
             float valor = Util.getFloatSemVirgulas(request.getParameter("valor"));
             String horario = request.getParameter("horario");
             String observacao = request.getParameter("observacao");
@@ -38,7 +41,7 @@ public class AgendamentoServlet extends HttpServlet {
             Agendamento agendamento = new Agendamento();
             agendamento.setNomeCliente(nomeCliente);
             agendamento.setServico(servico);
-            agendamento.setData(data);
+            agendamento.setDataServico(data);
             agendamento.setValor(valor);
             agendamento.setHorario(horario);
             agendamento.setObservacao(observacao);
@@ -48,7 +51,17 @@ public class AgendamentoServlet extends HttpServlet {
 
             agendamentoDao.salvar(agendamento);
 
-            request.setAttribute("agendamentos",agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId()));
+            List<Agendamento> agendamentos = agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId());
+
+            agendamentos.forEach(agendamentoLoop -> {
+
+                if (agendamentoLoop.getObservacao().length() > 15) {
+                    agendamentoLoop.setObservacao(agendamentoLoop.getObservacao().substring(0, 15).concat("..."));
+                }
+
+            });
+
+            request.setAttribute("agendamentos", agendamentos);
             requestDispatcher = request.getRequestDispatcher("/pages/agendamento.jsp");
 
         }
