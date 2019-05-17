@@ -46,18 +46,19 @@ public class AgendamentoDao {
 
         try {
             String sql = "UPDATE agendamento SET nomeCliente=?, valor=?, dataservico=?, servico=?, "
-                    + " observacao=? WHERE id=?";
+                    + " horario=?, observacao=? WHERE id=?";
 
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, agendamento.getNomeCliente());
-            statement.setString(2, String.valueOf(agendamento.getValor()));
+            statement.setFloat(2, agendamento.getValor());
             date = new java.sql.Timestamp(agendamento.getDataServico().getTime());// Uso de timestamp para persistir também hora e minuto
             statement.setTimestamp(3, date);
             statement.setInt(4, agendamento.getServico().ordinal());
-            statement.setString(5, agendamento.getObservacao());
+            statement.setString(5, agendamento.getHorario());
+            statement.setString(6, agendamento.getObservacao());
             //statement.setLong(6, agendamento.getBarbeiro().getId());
-            statement.setLong(6, agendamento.getId());
+            statement.setLong(7, agendamento.getId());
             statement.execute();
             connection.commit();
 
@@ -170,35 +171,35 @@ public class AgendamentoDao {
         return contador;
     }
 
-    /*public Agendamento findById(Long id) {
+    public Agendamento findById(Long id) {
 
-        boolean resultado = false;
         Agendamento agendamento = null;
 
-        //A instrução try -with-resources, que fechará a conexão automaticamente
-        try (Connection conn = SingleConnection.getConnection()) {
+        String sql = "SELECT * FROM agendamento WHERE id =?";
 
-            String sql = "SELECT * FROM agendamento WHERE id =" + id;
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1,id);
+            ResultSet result = statement.executeQuery();
 
-            Statement statement = conn.prepareStatement(sql);
-            ResultSet result = statement.executeQuery(sql);
 
             while (result.next()) {
                 agendamento = new Agendamento();
                 agendamento.setId(result.getLong("id"));
                 agendamento.setNomeCliente(result.getString("nomeCliente"));
                 agendamento.setValor(result.getFloat("valor"));
-                agendamento.setDataServico(result.getTimestamp("data"));
+                agendamento.setDataServico(result.getTimestamp("dataservico"));
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
+                agendamento.setHorario(result.getString("horario"));
                 agendamento.setObservacao(result.getString("observacao"));
             }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return agendamento;
-    }*/
+    }
 
     /*DeletANDo agendamentos de forma automática sempre que um agendamento ou atualização for feito, dessa forma manterá a tabela de agendamento sempre atualizada próximo a data atual
     public static boolean deletarAgendamentosAutomatico() {
@@ -219,7 +220,7 @@ public class AgendamentoDao {
         return resultado;
     }*/
 
-    public void delete(Long id) {
+    public void deletar(Long id) {
 
         try {
 
@@ -269,4 +270,5 @@ public class AgendamentoDao {
 
         return agendamentos;
     }
+
 }

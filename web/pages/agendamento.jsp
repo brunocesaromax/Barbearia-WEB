@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <html>
 <head>
@@ -28,13 +29,13 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="nomeCliente">Nome do Cliente</label>
-            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" placeholder="Nome Cliente">
+            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" value="${agendamento.nomeCliente}" placeholder="Nome Cliente">
             <div id="erro-nome"></div>
         </div>
         <div class="form-group col-md-3">
             <label for="servico">Serviço</label>
             <select id="servico" name="servico" class="form-control" onfocus="carregarServicos()">
-                <option selected="Corte">Corte</option>
+                <option selected="Corte">${agendamento.servico.descricao}</option>
             </select>
         </div>
 
@@ -42,17 +43,17 @@
     <div class="form-row">
         <div class="form-group col-sm-2">
             <label for="dataServico">Data</label>
-            <input type="text" class="form-control" id="dataServico" name="dataServico" placeholder="03/05/2019">
+            <input type="text" class="form-control" id="dataServico" name="dataServico" value="<fmt:formatDate value="${agendamento.dataServico}" type="date" pattern="dd/MM/yyyy"/>" placeholder="03/05/2019">
         </div>
 
         <div class="form-group col-md-2">
             <label for="valor">Valor R$</label>
-            <input type="text" id="valor" name="valor" class="form-control" placeholder="R$00,00">
+            <input type="text" id="valor" name="valor" class="form-control" value="R$${agendamento.valor}" placeholder="R$00,00">
         </div>
 
         <div class="form-group col-md-2">
             <label for="horario">Horário</label>
-            <input type="text" id="horario" name="horario" class="form-control" placeholder="00:00">
+            <input type="text" id="horario" name="horario" class="form-control" value="${agendamento.horario}" placeholder="00:00">
         </div>
 
     </div>
@@ -60,7 +61,7 @@
         <div class="form-group col-md-6">
             <label for="observacao">Observação</label>
             <textarea class="form-control" id="observacao" name="observacao" rows="4"
-                      placeholder="Observações importantes"></textarea>
+                      placeholder="Observações importantes">${agendamento.observacao}</textarea>
         </div>
     </div>
 
@@ -68,11 +69,12 @@
     </div>
 
     <button type="submit" class="btn btn-primary"
-            onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=cadastrar'">
-        Cadastrar
+            onclick="return document.getElementById('formAgendamento').action = 'agendamento?acao=cadastrar&agendamento=${agendamento.id}'">
+        Salvar
     </button>
-    <button id="botaoCancelar" type="reset" class="btn btn-danger">
-        Cancelar
+    <button id="botaoVoltar" type="button" class="btn btn-secondary"
+            onclick="redirecionarPaginaInicialUsuario();">
+        Voltar
     </button>
 </form>
 
@@ -96,22 +98,27 @@
     <tbody>
     <c:forEach items="${agendamentos}" var="agendamento">
         <tr>
-                <%--<th scope="row">1</th>--%>
             <td><c:out value="${agendamento.nomeCliente}"></c:out></td>
-            <td><c:out value="${agendamento.servico}"></c:out></td>
-            <td> <c:out value="${agendamento.dataServico}"></c:out></td>
-            <td><c:out value="${agendamento.valor}"></c:out></td>
+            <td><c:out value="${agendamento.servico.descricao}"></c:out></td>
+            <td><fmt:formatDate value="${agendamento.dataServico}" type="date" pattern="dd/MM/yyyy"/></td>
+            <td>R$ <c:out value="${agendamento.valor}"></c:out></
+            </td>
             <td><c:out value="${agendamento.horario}"></c:out></td>
             <td><c:out value="${agendamento.observacao}"></c:out></td>
+            <td><a href="/gerenciador_barbearia/pages/agendamento?acao=deletar&agendamento=${agendamento.id}"><img
+                    src="../resources/img/excluir.png"
+                    alt="Excluir" title="Excluir"
+                    width="20px" height="20px"></a></td>
+            <td><a href="/gerenciador_barbearia/pages/agendamento?acao=editar&agendamento=${agendamento.id}"><img
+                    src="../resources/img/editar.png"
+                    alt="Editar" title="Editar" width="20px"
+                    height="20px"></a></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
 
 <script type="application/javascript">
-
-    var botao = document.getElementById('botaoCancelar')
-    botao.addEventListener('click', statusBotao)
 
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
     var flagBotaoCancelar = false
@@ -120,6 +127,7 @@
     var flagServico = false
 
     limparCampos()
+    msgExclusao()
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -148,8 +156,16 @@
 
     }
 
-    function statusBotao() {
-        flagBotaoCancelar = true
+    function msgExclusao() {
+
+        var texto = '${msgAgendamento}'
+
+        if (texto === 'Agendamento excluído com sucesso.'){
+            var divDangerLogin = document.getElementById('divResultado')
+            divDangerLogin.setAttribute('class', "alert alert-success")
+            divDangerLogin.setAttribute('role', "alert")
+            divDangerLogin.innerText = texto
+        }
     }
 
     function validaCampos() {
@@ -270,16 +286,11 @@
         }
         return false                           // se inválida :(
     }
-  /*
-    function formataData() {
-        var data = ${dataServico}
 
-        novaData= data.split(' ')[0].split('-').reverse().join('/')
-
-
-        document.getElementById('dataTabela').innerText(novaData)
-
-    }*/
+    function redirecionarPaginaInicialUsuario() {
+        // Faz um redirecionamento sem adicionar a página original ao histórico de navegação do browser.
+        window.location.replace("/gerenciador_barbearia/pages/paginaInicialUsuario.jsp");
+    }
 
 </script>
 </body>

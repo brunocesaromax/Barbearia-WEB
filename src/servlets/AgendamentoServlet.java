@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +26,14 @@ public class AgendamentoServlet extends HttpServlet {
 
         String acao = request.getParameter("acao");
         RequestDispatcher requestDispatcher = null;
+        Long idAgendamentoEdicao = null;
 
         if (acao.equalsIgnoreCase("cadastrar")) {
+
+            //Salvar ou Atualizar?
+            if (!request.getParameter("agendamento").isEmpty()) {
+                idAgendamentoEdicao = Long.valueOf(request.getParameter("agendamento"));
+            }
 
             String nomeCliente = request.getParameter("nomeCliente");
             EnumServico servico = EnumServico.valor(request.getParameter("servico"));
@@ -49,18 +53,15 @@ public class AgendamentoServlet extends HttpServlet {
             Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
             agendamento.setUsuario(usuarioSessao);
 
-            agendamentoDao.salvar(agendamento);
 
-            List<Agendamento> agendamentos = agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId());
+            if (idAgendamentoEdicao != null) {//caso seja atualização
+                agendamento.setId(idAgendamentoEdicao);
+                agendamentoDao.update(agendamento);
+            } else {//caso seja cadastro
+                agendamentoDao.salvar(agendamento);
+            }
 
-            agendamentos.forEach(agendamentoLoop -> {
-
-                if (agendamentoLoop.getObservacao().length() > 15) {
-                    agendamentoLoop.setObservacao(agendamentoLoop.getObservacao().substring(0, 15).concat("..."));
-                }
-
-            });
-
+            List<Agendamento> agendamentos = buscarAgendamentosFormatados(usuarioSessao);
             request.setAttribute("agendamentos", agendamentos);
             requestDispatcher = request.getRequestDispatcher("/pages/agendamento.jsp");
 
@@ -73,16 +74,53 @@ public class AgendamentoServlet extends HttpServlet {
             ServletException, IOException {
 
         String acao = request.getParameter("acao");
+        RequestDispatcher requestDispatcher = null;
 
         if (acao.equalsIgnoreCase("listar")) {
 
             Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
-            request.setAttribute("agendamentos", agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId()));
-            RequestDispatcher requestDispatcher = null;
+
+            List<Agendamento> agendamentos = buscarAgendamentosFormatados(usuarioSessao);
+            request.setAttribute("agendamentos", agendamentos);
 
             requestDispatcher = request.getRequestDispatcher("/pages/agendamento.jsp");
             requestDispatcher.forward(request, response);
+        } else if (acao.equalsIgnoreCase("deletar")) {
+
+            Long idAgendamento = Long.valueOf(request.getParameter("agendamento"));
+
+            agendamentoDao.deletar(idAgendamento);
+
+            request.setAttribute("msgAgendamento", "Agendamento excluído com sucesso.");
+
+            requestDispatcher = request.getRequestDispatcher("/pages/agendamento?acao=listar");
+            requestDispatcher.forward(request, response);
+        } else if (acao.equalsIgnoreCase("editar")) {
+
+            Long idAgendamento = Long.valueOf(request.getParameter("agendamento"));
+
+            Agendamento agendamentoEdicao = agendamentoDao.findById(idAgendamento);
+
+            request.setAttribute("agendamento", agendamentoEdicao);
+
+            requestDispatcher = request.getRequestDispatcher("/pages/agendamento?acao=listar");
+            requestDispatcher.forward(request, response);
         }
 
+    }
+
+    private List<Agendamento> buscarAgendamentosFormatados(Usuario usuarioSessao){
+
+        List<Agendamento> agendamentos = agendamentoDao.findAllByIdBarbeiro(usuarioSessao.getId());
+
+        agendamentos.forEach(agendamentoLoop -> {
+
+            if (agendamentoLoop.getObservacao().length() > 15) {
+                agendamentoLoop.setObservacao(agendamentoLoop.getObservacao().substring(0, 15).concat("..."));
+            }
+
+        });
+
+        return agendamentos;
     }
 }
