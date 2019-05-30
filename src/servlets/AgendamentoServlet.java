@@ -6,18 +6,23 @@ import dao.AgendamentoDao;
 import modelo.Agendamento;
 import modelo.EnumServico;
 import modelo.Usuario;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 @WebServlet("/pages/agendamento")
+@MultipartConfig
 public class AgendamentoServlet extends HttpServlet {
 
     private AgendamentoDao agendamentoDao = new AgendamentoDao();
@@ -49,6 +54,17 @@ public class AgendamentoServlet extends HttpServlet {
             agendamento.setValor(valor);
             agendamento.setHorario(horario);
             agendamento.setObservacao(observacao);
+
+            /*Validar se o formulário é de upload de arquivos*/
+            if (ServletFileUpload.isMultipartContent(request)) {
+
+                Part imagem = request.getPart("imagem");
+
+                String imagemBase64 = new Base64().encodeBase64String(Util.convertStreamtoByte(imagem.getInputStream()));
+
+                agendamento.setImagem(imagemBase64);
+                agendamento.setContenttype(imagem.getContentType());
+            }
 
             Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
             agendamento.setUsuario(usuarioSessao);

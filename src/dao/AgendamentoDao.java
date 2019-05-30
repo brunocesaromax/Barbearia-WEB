@@ -20,7 +20,7 @@ public class AgendamentoDao {
         java.sql.Timestamp date;
 
         try {
-            String sql = "INSERT INTO agendamento (nomeCliente, valor, dataservico, servico, horario, observacao, barbeiro_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO agendamento (nomeCliente, valor, dataservico, servico, horario, observacao, barbeiro_id, imagem, contenttype) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
             statement.setString(1, agendamento.getNomeCliente());
@@ -31,6 +31,9 @@ public class AgendamentoDao {
             statement.setString(5, agendamento.getHorario());
             statement.setString(6, agendamento.getObservacao());
             statement.setLong(7, agendamento.getUsuario().getId());
+            statement.setString(8, agendamento.getImagem());
+            statement.setString(9, agendamento.getContenttype());
+
 
             statement.execute();
             connection.commit();
@@ -46,7 +49,7 @@ public class AgendamentoDao {
 
         try {
             String sql = "UPDATE agendamento SET nomeCliente=?, valor=?, dataservico=?, servico=?, "
-                    + " horario=?, observacao=? WHERE id=?";
+                    + " horario=?, observacao=?, imagem=?, contenttype=? WHERE id=?";
 
             PreparedStatement statement = null;
             statement = connection.prepareStatement(sql);
@@ -57,8 +60,9 @@ public class AgendamentoDao {
             statement.setInt(4, agendamento.getServico().ordinal());
             statement.setString(5, agendamento.getHorario());
             statement.setString(6, agendamento.getObservacao());
-            //statement.setLong(6, agendamento.getBarbeiro().getId());
-            statement.setLong(7, agendamento.getId());
+            statement.setString(7, agendamento.getImagem());
+            statement.setString(8, agendamento.getContenttype());
+            statement.setLong(9, agendamento.getId());
             statement.execute();
             connection.commit();
 
@@ -139,6 +143,8 @@ public class AgendamentoDao {
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setHorario(result.getString("horario"));
                 agendamento.setObservacao(result.getString("observacao"));
+                agendamento.setImagem(result.getString("imagem"));
+                agendamento.setImagem(result.getString("contenttype"));
                 agendamentos.add(agendamento);
             }
 
@@ -193,6 +199,8 @@ public class AgendamentoDao {
                 agendamento.setServico(EnumServico.valueOf(result.getInt("servico")));
                 agendamento.setHorario(result.getString("horario"));
                 agendamento.setObservacao(result.getString("observacao"));
+                agendamento.setImagem(result.getString("imagem"));
+                agendamento.setContenttype(result.getString("contenttype"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

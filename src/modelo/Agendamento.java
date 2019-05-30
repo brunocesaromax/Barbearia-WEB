@@ -14,6 +14,10 @@ public class Agendamento {
     private String horario;
     private String observacao;
     private Usuario usuario;//Barbeiro
+    private String imagem;
+    private String contenttype;
+    private String imagemTemporaria;
+
 
     public Agendamento(String nomeCliente, float valor, String dataServico, EnumServico servico, String observacao, Usuario usuario) {
         this.nomeCliente = nomeCliente;
@@ -93,5 +97,29 @@ public class Agendamento {
 
     public void setHorario(String horario) {
         this.horario = horario;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getContenttype() {
+        return contenttype;
+    }
+
+    public void setContenttype(String contenttype) {
+        this.contenttype = contenttype;
+    }
+
+    public String getImagemTemporaria() {
+        return ("data:" + contenttype + ";base64," + imagem).split("value")[0];
+    }
+
+    public void setImagemTemporaria(String imagemTemporaria) {
+        this.imagemTemporaria = imagemTemporaria;
     }
 }

@@ -18,11 +18,18 @@
     <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
     <script src='../script/jquery.mask.min.js'></script>
 
+    <style>
+        #div-imagem {
+            top: 32px;
+            right: 56px;
+        }
+
+    </style>
 </head>
 <body class="bg-light align-content-center">
 
 <form action="AgendamentoServlet" id="formAgendamento" onsubmit=" return validaCampos()" method="post"
-      accept-charset="ISO-8859-1" class="align-content-center">
+      enctype="multipart/form-data" accept-charset="ISO-8859-1" class="align-content-center">
     <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Agendamento</h1>
     <br/>
     <br/>
@@ -54,6 +61,12 @@
         <div class="form-group col-md-2">
             <label for="horario">Horário</label>
             <input type="text" id="horario" name="horario" class="form-control" value="${agendamento.horario}" placeholder="00:00">
+        </div>
+
+        <label>Imagem</label>
+        <div class="form-group col-md-2" id="div-imagem">
+            <img src="<c:out value="${agendamento.imagemTemporaria}"></c:out>" width="150px" height="150px">
+            <input type="file" id="imagem" name="imagem"/>
         </div>
 
     </div>

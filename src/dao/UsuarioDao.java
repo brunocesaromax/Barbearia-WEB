@@ -70,30 +70,6 @@ public class UsuarioDao {
         }
     }
 
-    public void atualizar(Usuario usuario) {
-
-        try {
-            String sql = "update usuario set login = ?, senha = ?, nome = ? where id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, usuario.getEmail());
-            preparedStatement.setString(2, usuario.getSenha());
-            preparedStatement.setString(3, usuario.getNome());
-            preparedStatement.setLong(4, usuario.getId());
-            preparedStatement.executeUpdate();
-            connection.commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-    }
-
     public Usuario getByEmail(String email) {
 
         try {
