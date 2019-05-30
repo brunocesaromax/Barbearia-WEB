@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <head>
@@ -9,48 +10,70 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <style>
+        #div-imagem {
+            top: 32px;
+            right: 56px;
+        }
+
+    </style>
 
 
 </head>
 <body class="bg-light">
 
 <form action="/pages/editarUsuario" id="formEdicaoUsuario" onsubmit=" return validaCampos()" method="post"
-      accept-charset="ISO-8859-1">
+      accept-charset="ISO-8859-1" enctype="multipart/form-data">
     <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Edição de usuário</h1>
     <br/>
     <br/>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="nome">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="${usuarioSessao.nome}" placeholder="Nome">
-            <div id="erro-nome"></div>
+            <input type="text" class="form-control" id="nome" name="nome" value="${usuarioSessao.nome}"
+                   placeholder="Nome">
         </div>
         <div class="form-group col-md-1">
             <label for="idade">Idade</label>
-            <select id="idade" name="idade" value="${usuarioSessao.idade}" class="form-control" onclick="carregarIdades()">
+            <select id="idade" name="idade" value="${usuarioSessao.idade}" class="form-control"
+                    onclick="carregarIdades()">
                 <option selected="${usuarioSessao.idade}">${usuarioSessao.idade}</option>
             </select>
         </div>
 
+        <label>Imagem</label>
+        <div class="form-group col-md-2" id="div-imagem">
+            <img src="<c:out value="${usuarioSessao.imagemTemporaria}"></c:out>" width="100px" height="100px">
+            <input type="file" accept="image/*" id="imagem" name="imagem" onchange="loadFile(event)"/>
+        </div>
+    </div>
+
+    <br/>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" name="email" value="${usuarioSessao.email}" placeholder="Email">
+            <input type="text" class="form-control" id="email" name="email" value="${usuarioSessao.email}"
+                   placeholder="Email">
         </div>
         <div class="form-group col-md-6">
             <label for="senha">Senha</label>
-            <input type="password" class="form-control" id="senha" name="senha" value="${usuarioSessao.senha}" placeholder="Senha">
+            <input type="password" class="form-control" id="senha" name="senha" value="${usuarioSessao.senha}"
+                   placeholder="Senha">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="rua">Rua</label>
-            <input type="text" class="form-control" id="rua" name="rua" value="${usuarioSessao.rua}" placeholder="Rua X">
+            <input type="text" class="form-control" id="rua" name="rua" value="${usuarioSessao.rua}"
+                   placeholder="Rua X">
         </div>
         <div class="form-group col-md-6">
             <label for="bairro">Bairro</label>
-            <input type="text" class="form-control" id="bairro" name="bairro" value="${usuarioSessao.bairro}" placeholder="Setor XYZ">
+            <input type="text" class="form-control" id="bairro" name="bairro" value="${usuarioSessao.bairro}"
+                   placeholder="Setor XYZ">
         </div>
     </div>
     <div class="form-row">
@@ -65,7 +88,8 @@
         </div>
         <div class="form-group col-md-2">
             <label for="cep">CEP</label>
-            <input type="text" class="form-control" id="cep" name="cep" value="${usuarioSessao.cep}" onblur="consultaCep()">
+            <input type="text" class="form-control" id="cep" name="cep" value="${usuarioSessao.cep}"
+                   onblur="consultaCep()">
         </div>
     </div>
 
@@ -86,11 +110,11 @@
 <script type="application/javascript">
 
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
-    var flagBotaoCancelar = false
+    var flagBotaoCancelar = false;
 
-    limparCampos()
-    mensagemEmailExistente()
-    mensagemSucessoEdicao()
+    limparCampos();
+    mensagemEmailExistente();
+    mensagemSucessoEdicao();
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -100,38 +124,38 @@
 
     function mensagemEmailExistente() {
 
-        var texto = ''
-        texto+='${msgCadastro}'
+        var texto = '';
+        texto += '${msgCadastro}';
 
         if (texto != '') {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText =texto
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-danger");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = texto
         }
     }
 
     function mensagemSucessoEdicao() {
 
-        var texto = ''
-        texto+='${msgSucessoEdicao}'
+        var texto = '';
+        texto += '${msgSucessoEdicao}';
 
         if (texto != '') {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-success")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText =texto
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-success");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = texto
         }
     }
 
     function carregarIdades() {
 
-        var element = document.getElementById('idade')
+        var element = document.getElementById('idade');
 
         for (i = 16; i <= 99; i++) {
-            var opcao = document.createElement('option')
-            opcao.value = i
-            opcao.innerHTML = i
+            var opcao = document.createElement('option');
+            opcao.value = i;
+            opcao.innerHTML = i;
             element.appendChild(opcao)
         }
 
@@ -143,7 +167,7 @@
             return true
         }
 
-        var erro = ''
+        var erro = '';
 
         if (document.getElementById("nome").value === '') {
             erro += 'Informe o nome.\n'
@@ -176,10 +200,10 @@
         if (erro == '') {
             return true
         } else {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText = erro
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-danger");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = erro;
 
             return false
         }
@@ -219,6 +243,12 @@
         // Faz um redirecionamento sem adicionar a página original ao histórico de navegação do browser.
         window.location.replace("/gerenciador_barbearia/pages/paginaInicialUsuario.jsp");
     }
+
+    var loadFile = function (event) {
+        var output = document.getElementById('imagem');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    };
+
 
 </script>
 </body>

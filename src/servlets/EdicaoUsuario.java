@@ -1,18 +1,24 @@
 package servlets;
 
 
+import Utilitarios.Util;
 import dao.UsuarioDao;
 import modelo.Usuario;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 
 @WebServlet("/pages/editarUsuario")
+@MultipartConfig
 public class EdicaoUsuario extends HttpServlet {
 
     private UsuarioDao usuarioDao = new UsuarioDao();
@@ -22,6 +28,7 @@ public class EdicaoUsuario extends HttpServlet {
         String acao = request.getParameter("acao");
         Usuario usuarioSessao = (Usuario) request.getSession().getAttribute("usuarioSessao");
         RequestDispatcher requestDispatcher = null;
+        Usuario usuario = new Usuario();
 
         String email = request.getParameter("email");
 
@@ -34,7 +41,16 @@ public class EdicaoUsuario extends HttpServlet {
         String estado = request.getParameter("estado");
         String cep = request.getParameter("cep");
 
-        Usuario usuario = new Usuario();
+        if (ServletFileUpload.isMultipartContent(request)) {
+
+            Part imagem = request.getPart("imagem");
+
+            String imagemBase64 = new Base64().encodeBase64String(Util.convertStreamtoByte(imagem.getInputStream()));
+
+            usuario.setImagem(imagemBase64);
+            usuario.setContenttype(imagem.getContentType());
+        }
+
         usuario.setBairro(bairro);
         usuario.setCep(cep);
         usuario.setCidade(cidade);
@@ -92,4 +108,5 @@ public class EdicaoUsuario extends HttpServlet {
             ServletException, IOException {
 
     }
+
 }

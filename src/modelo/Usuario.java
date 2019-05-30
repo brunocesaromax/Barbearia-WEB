@@ -12,6 +12,9 @@ public class Usuario {
     private String estado;
     private String cep;
     private int idade;
+    private String imagem;
+    private String contenttype;
+    private String imagemTemporaria;
 
 
     public Long getId() {
@@ -92,5 +95,26 @@ public class Usuario {
 
     public void setIdade(int idade) {
         this.idade = idade;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    public String getContenttype() {
+        return contenttype;
+    }
+
+    public void setContenttype(String contenttype) {
+        this.contenttype = contenttype;
+    }
+
+    /*Usar somente para mostrar na view. por isso nao existe o set*/
+    public String getImagemTemporaria() {
+        return ("data:" + contenttype + ";base64," + imagem).split("value")[0];
     }
 }

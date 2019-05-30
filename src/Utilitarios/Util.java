@@ -1,5 +1,8 @@
 package Utilitarios;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -46,4 +49,23 @@ public class Util {
         }
         return retorno;
     }
+
+    public static byte[] convertStreamtoByte(InputStream imagem) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            int reads = imagem.read();
+
+            /*Enquanto houver dados na imagem, escrever no output*/
+            while (reads != -1) {
+                outputStream.write(reads);
+                reads = imagem.read();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return outputStream.toByteArray();
+    }
+
 }

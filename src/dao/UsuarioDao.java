@@ -23,7 +23,7 @@ public class UsuarioDao {
             String sql;
 
             if (usuario.getId() == null) {
-                sql = "insert into usuario(email,senha,nome,cep,rua,bairro,cidade,estado,idade) values (?,?,?,?,?,?,?,?,?)";
+                sql = "insert into usuario(email,senha,nome,cep,rua,bairro,cidade,estado,idade,imagem,contenttype) values (?,?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, usuario.getEmail());
                 statement.setString(2, usuario.getSenha());
@@ -34,9 +34,11 @@ public class UsuarioDao {
                 statement.setString(7, usuario.getCidade());
                 statement.setString(8, usuario.getEstado());
                 statement.setLong(9, usuario.getIdade());
+                statement.setString(10, usuario.getImagem());
+                statement.setString(11, usuario.getContenttype());
                 statement.execute();
             } else {
-                sql = "UPDATE usuario SET email = ?,senha = ?,nome =?,cep=?,rua=?,bairro=?,cidade=?,estado=?,idade=? WHERE id = ?";
+                sql = "UPDATE usuario SET email = ?,senha = ?,nome =?,cep=?,rua=?,bairro=?,cidade=?,estado=?,idade=?, imagem=?, contenttype=? WHERE id = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, usuario.getEmail());
                 statement.setString(2, usuario.getSenha());
@@ -47,7 +49,9 @@ public class UsuarioDao {
                 statement.setString(7, usuario.getCidade());
                 statement.setString(8, usuario.getEstado());
                 statement.setLong(9, usuario.getIdade());
-                statement.setLong(10, usuario.getId());
+                statement.setString(10, usuario.getImagem());
+                statement.setString(11, usuario.getContenttype());
+                statement.setLong(12, usuario.getId());
                 statement.execute();
             }
 
@@ -138,6 +142,8 @@ public class UsuarioDao {
                 usuario.setCidade(resultSet.getString("cidade"));
                 usuario.setEstado(resultSet.getString("estado"));
                 usuario.setCep(resultSet.getString("cep"));
+                usuario.setImagem(resultSet.getString("imagem"));
+                usuario.setContenttype(resultSet.getString("contenttype"));
                 return usuario;
             }
 

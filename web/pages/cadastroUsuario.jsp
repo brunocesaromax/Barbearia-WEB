@@ -9,13 +9,20 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"
             integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
             crossorigin="anonymous"></script>
+    <style>
+        #div-imagem {
+            top: 32px;
+            right: 56px;
+        }
+
+    </style>
 
 
 </head>
 <body class="bg-light">
 
-<form action="cadastrarUsuario" id="formCadastroUsuario" onsubmit=" return validaCampos()" method="post"
-      accept-charset="ISO-8859-1">
+<form action="cadastrarUsuario" id="formCadastroUsuario" onsubmit=" return validaCampos()" enctype="multipart/form-data"
+      method="post" accept-charset="ISO-8859-1">
     <input readonly="readonly" type="hidden" id="url" name="url" value="<%=request.getParameter("url")%>"><%--oculto--%>
     <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Cadastro de usuário</h1>
     <br/>
@@ -24,13 +31,16 @@
         <div class="form-group col-md-6">
             <label for="nome">Nome</label>
             <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome">
-            <div id="erro-nome"></div>
         </div>
         <div class="form-group col-md-1">
             <label for="idade">Idade</label>
             <select id="idade" name="idade" class="form-control" onclick="carregarIdades()">
                 <option selected="16">16</option>
             </select>
+        </div>
+        <label>Imagem</label>
+        <div class="form-group col-md-2" id="div-imagem">
+            <input type="file" id="imagem" name="imagem"/>
         </div>
 
     </div>
@@ -88,11 +98,11 @@
 <script type="application/javascript">
 
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
-    var flagBotaoCancelar = false
+    var flagBotaoCancelar = false;
 
-    limparCampos()
-    mensagemEmailExistente()
-    mensagemSucessoCadastro()
+    limparCampos();
+    mensagemEmailExistente();
+    mensagemSucessoCadastro();
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -102,12 +112,12 @@
 
     function carregarIdades() {
 
-        var element = document.getElementById('idade')
+        var element = document.getElementById('idade');
 
         for (i = 17; i <= 99; i++) {
-            var opcao = document.createElement('option')
-            opcao.value = i
-            opcao.innerHTML = i
+            var opcao = document.createElement('option');
+            opcao.value = i;
+            opcao.innerHTML = i;
             element.appendChild(opcao)
         }
 
@@ -115,14 +125,14 @@
 
     function mensagemEmailExistente() {
 
-        var texto = ''
-        texto+='${msgCadastro}'
+        var texto = '';
+        texto += '${msgCadastro}';
 
         if (texto != '') {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText =texto
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-danger");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = texto
         }
     }
 
@@ -132,7 +142,7 @@
             return true
         }
 
-        var erro = ''
+        var erro = '';
 
         if (document.getElementById("nome").value === '') {
             erro += 'Informe o nome.\n'
@@ -165,10 +175,10 @@
         if (erro == '') {
             return true
         } else {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText = erro
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-danger");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = erro;
 
             return false
         }
@@ -211,14 +221,14 @@
 
     function mensagemSucessoCadastro() {
 
-        var texto = ''
-        texto+='${msgSucessoCadastro}'
+        var texto = '';
+        texto += '${msgSucessoCadastro}';
 
         if (texto != '') {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-success")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText =texto
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-success");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = texto
         }
     }
 

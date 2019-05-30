@@ -105,7 +105,8 @@
             </td>
             <td><c:out value="${agendamento.horario}"></c:out></td>
             <td><c:out value="${agendamento.observacao}"></c:out></td>
-            <td><a href="/gerenciador_barbearia/pages/agendamento?acao=deletar&agendamento=${agendamento.id}"><img
+            <td><a href="/gerenciador_barbearia/pages/agendamento?acao=deletar&agendamento=${agendamento.id}"
+                   onclick="return confirm('Confirmar exclusão de agendamento?')"><img
                     src="../resources/img/excluir.png"
                     alt="Excluir" title="Excluir"
                     width="20px" height="20px"></a></td>
@@ -121,13 +122,13 @@
 <script type="application/javascript">
 
     /*Flag para reconhecer que o botão clicado foi o botão cancelar*/
-    var flagBotaoCancelar = false
+    var flagBotaoCancelar = false;
 
     /*Flag para reconhecer que o select de serviços já foi clicado*/
-    var flagServico = false
+    var flagServico = false;
 
-    limparCampos()
-    msgExclusao()
+    limparCampos();
+    msgExclusao();
 
     /*Limpar campos ao abrir a tela de cadastro*/
     function limparCampos() {
@@ -139,15 +140,15 @@
 
         if (!flagServico) {
 
-            var element = document.getElementById('servico')
+            var element = document.getElementById('servico');
             var servicos = ['Barba', 'Química', 'Pigmentação', 'Barba + Corte',
-                'Sobrancelha', 'Descoloração', 'Depilação', 'Unha', 'Outros']
+                'Sobrancelha', 'Descoloração', 'Depilação', 'Unha', 'Outros'];
 
             for (i = 0; i < servicos.length; i++) {
 
-                var opcao = document.createElement('option')
-                opcao.value = servicos[i]
-                opcao.innerHTML = servicos[i]
+                var opcao = document.createElement('option');
+                opcao.value = servicos[i];
+                opcao.innerHTML = servicos[i];
                 element.appendChild(opcao)
             }
 
@@ -158,12 +159,12 @@
 
     function msgExclusao() {
 
-        var texto = '${msgAgendamento}'
+        var texto = '${msgAgendamento}';
 
         if (texto === 'Agendamento excluído com sucesso.'){
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-success")
-            divDangerLogin.setAttribute('role', "alert")
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-success");
+            divDangerLogin.setAttribute('role', "alert");
             divDangerLogin.innerText = texto
         }
     }
@@ -174,7 +175,7 @@
             return true
         }
 
-        var erro = ''
+        var erro = '';
 
         if (document.getElementById("nomeCliente").value === '') {
             erro += 'Informe o nome do cliente.\n'
@@ -195,10 +196,10 @@
         if (erro == '') {
             return true
         } else {
-            var divDangerLogin = document.getElementById('divResultado')
-            divDangerLogin.setAttribute('class', "alert alert-danger")
-            divDangerLogin.setAttribute('role', "alert")
-            divDangerLogin.innerText = erro
+            var divDangerLogin = document.getElementById('divResultado');
+            divDangerLogin.setAttribute('class', "alert alert-danger");
+            divDangerLogin.setAttribute('role', "alert");
+            divDangerLogin.innerText = erro;
 
             return false
         }

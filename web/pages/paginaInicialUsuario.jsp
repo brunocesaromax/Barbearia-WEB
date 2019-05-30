@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
@@ -9,7 +10,9 @@
 
     <link rel='stylesheet prefetch'
           href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
-
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
     <style>
         /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
         @import url('http://fonts.googleapis.com/css?family=Open+Sans:300,400,700');
@@ -116,13 +119,20 @@
         }
 
     </style>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
 
 </head>
 
 <body>
-<h1 style="">Bem vindo: ${usuarioSessao.nome}</h1>
+
+<div class="form-row">
+    <div class="form-group col-md-5">
+        <h1 style="">Bem vindo: ${usuarioSessao.nome}</h1>
+        <img src="<c:out value="${usuarioSessao.imagemTemporaria}"></c:out>" width="250px" height="250px">
+    </div>
+
+</div>
 
 <aside class="sidebar">
 

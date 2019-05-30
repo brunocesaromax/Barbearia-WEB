@@ -1,18 +1,24 @@
 package servlets;
 
-
+import Utilitarios.Util;
 import dao.UsuarioDao;
 import modelo.Usuario;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
 
+
 @WebServlet("/cadastrarUsuario")
+@MultipartConfig /*Notação necessária para servlets com multi-part-file*/
 public class CadastroUsuario extends HttpServlet {
 
     private UsuarioDao usuarioDao = new UsuarioDao();
@@ -22,6 +28,7 @@ public class CadastroUsuario extends HttpServlet {
         String acao = request.getParameter("acao");
         RequestDispatcher requestDispatcher = null;
 
+        Usuario usuario = new Usuario();
         String email = request.getParameter("email");
 
         if ((acao.equalsIgnoreCase("cadastrar") || acao.equalsIgnoreCase("edicao"))
@@ -36,7 +43,17 @@ public class CadastroUsuario extends HttpServlet {
             String estado = request.getParameter("estado");
             String cep = request.getParameter("cep");
 
-            Usuario usuario = new Usuario();
+            /*Validar se o formulário é de upload de arquivos*/
+            if (ServletFileUpload.isMultipartContent(request)) {
+
+                Part imagem = request.getPart("imagem");
+
+                String imagemBase64 = new Base64().encodeBase64String(Util.convertStreamtoByte(imagem.getInputStream()));
+
+                usuario.setImagem(imagemBase64);
+                usuario.setContenttype(imagem.getContentType());
+            }
+
             usuario.setBairro(bairro);
             usuario.setCep(cep);
             usuario.setCidade(cidade);
